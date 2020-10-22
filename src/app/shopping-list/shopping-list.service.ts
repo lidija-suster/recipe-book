@@ -20,4 +20,12 @@ export class ShoppingListService {
         // Emit event to a copy of an array
         this.ingretientsChanged.emit(this.ingredients.slice());
     }
+
+    addIngredients(ingredients: Ingredient[]) {
+        // for (let ingredient of ingredients) {
+        //     this.addIngredient(ingredient);
+        // }
+        this.ingredients.push(...ingredients);
+        this.ingretientsChanged.emit(this.ingredients.slice());
+    }
 }

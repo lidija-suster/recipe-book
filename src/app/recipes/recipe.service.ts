@@ -1,7 +1,9 @@
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
+import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { Recipe } from './recipe.model';
 
+@Injectable()
 export class RecipeService {
     recipeSelected = new EventEmitter<Recipe>();
 
@@ -20,12 +22,18 @@ export class RecipeService {
             'Super hot barbecue sausages',
             'https://p0.pikrepo.com/preview/409/766/pile-of-grilled-sausages.jpg',
             [
-                new Ingredient('Meat', 1),
+                new Ingredient('Meat', 10),
                 new Ingredient('French Fries', 30)
             ])
     ];
 
+    constructor(private shoppingListService: ShoppingListService) { }
+
     getRecipes() {
         return this.recipes.slice();
+    }
+
+    addIngredientsToShoppingList(ingredients: Ingredient[]) {
+        this.shoppingListService.addIngredients(ingredients);
     }
 }
