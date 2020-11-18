@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, tap } from 'rxjs/operators';
-import { Subject, throwError } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
 import { User } from './user.model';
 
 export interface AuthResponseData {
@@ -18,7 +18,10 @@ export interface AuthResponseData {
     providedIn: 'root'
 })
 export class AuthService {
-    userSubject = new Subject<User>();
+    // Behaves like other subjects, with difference that BehaviorSubject gives subscribers 
+    // imediate access to the previously emitted value, even if they haven't subscribed at the 
+    // time when that value was emitted
+    user = new BehaviorSubject<User>(null);
 
     constructor(private http: HttpClient) { }
 
@@ -48,7 +51,7 @@ export class AuthService {
     private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
         const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
         const user = new User(email, userId, token, expirationDate);
-        this.userSubject.next(user);
+        this.user.next(user);
     }
 
     private handleError(errorRes: HttpErrorResponse) {
