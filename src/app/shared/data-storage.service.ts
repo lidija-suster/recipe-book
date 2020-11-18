@@ -29,20 +29,15 @@ export class DataStorageService {
         // and there we pass the function, where we get the data from the previous observable, 
         // and then we return the new observable in there, which then will replace our previous observable 
         // in entire observable chain
-        return this.authService.user.pipe(
-            take(1),
-            exhaustMap(user => {
-                return this.http.get<Recipe[]>('https://recipe-book-830ab.firebaseio.com/recipes.json',
-                    {
-                        params: new HttpParams().set('auth', user.token)
-                    })
-            }), map(recipes => {
+
+        return this.http.get<Recipe[]>('https://recipe-book-830ab.firebaseio.com/recipes.json')
+            .pipe(map(recipes => {
                 return recipes.map(recipe => {
                     return { ...recipe, ingredients: recipe.ingredients ? recipe.ingredients : [] }
                 });
             }),
-            tap(recipes => {
-                this.recipeService.setRecipes(recipes);
-            }));
+                tap(recipes => {
+                    this.recipeService.setRecipes(recipes);
+                }));
     }
 }
