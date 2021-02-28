@@ -63,7 +63,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "recipe-book:build"
+            "browserTarget": "recipe-book:build",
+            "open": true
           },
           "configurations": {
             "production": {
